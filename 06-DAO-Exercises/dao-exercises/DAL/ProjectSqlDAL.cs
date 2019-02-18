@@ -9,7 +9,11 @@ namespace dao_exercises.DAL
     class ProjectSqlDAL
     {
         private string connectionString;
-        private const string SQL_GetDeptNames = @"SELECT * FROM project";
+        private const string SQL_GetProjectNames = @"SELECT * FROM project";
+        private const string SQL_AssignEmployees = @"INSERT INTO project_employee (project_id, employee_id) VALUES (@project_id, @employee_id);";
+        private const string SQL_RemoveEmployee = @"DELETE FROM project_employee WHERE project_id = @project_id AND  employee_id = @employee_id;";
+        private const string SQL_InsertProject = @"INSERT INTO project (name, from_date, to_date) VALUES (@name, @startdate, @enddate);";
+        private const string SQL_SelectProjectID = @"SELECT project_id FROM project WHERE name = @name;";
 
         // Single Parameter Constructor
         public ProjectSqlDAL(string dbConnectionString)
@@ -32,7 +36,7 @@ namespace dao_exercises.DAL
                     conn.Open();
 
                     SqlCommand cmd = new SqlCommand();
-                    cmd.CommandText = SQL_GetDeptNames;
+                    cmd.CommandText = SQL_GetProjectNames;
                     cmd.Connection = conn;
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -66,7 +70,29 @@ namespace dao_exercises.DAL
         /// <returns>If it was successful.</returns>
         public bool AssignEmployeeToProject(int projectId, int employeeId)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(SQL_AssignEmployees, conn);
+                    cmd.Parameters.AddWithValue("@project_id", projectId);
+                    cmd.Parameters.AddWithValue("@employee_id", employeeId);
+                    int count = cmd.ExecuteNonQuery();
+                    if (count > 0)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -77,7 +103,29 @@ namespace dao_exercises.DAL
         /// <returns>If it was successful.</returns>
         public bool RemoveEmployeeFromProject(int projectId, int employeeId)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(SQL_RemoveEmployee, conn);
+                    cmd.Parameters.AddWithValue("@project_id", projectId);
+                    cmd.Parameters.AddWithValue("@employee_id", employeeId);
+                    int count = cmd.ExecuteNonQuery();
+                    if (count > 0)
+                    {
+                        result = true;
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -87,7 +135,35 @@ namespace dao_exercises.DAL
         /// <returns>The new id of the project.</returns>
         public int CreateProject(Project newProject)
         {
-            throw new NotImplementedException();
+            int count = 0;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand(SQL_InsertProject, conn);
+                    cmd.Parameters.AddWithValue("@name", newProject.Name);
+                    cmd.Parameters.AddWithValue("@startdate", newProject.StartDate);
+                    cmd.Parameters.AddWithValue("@enddate", newProject.EndDate);
+                    count = cmd.ExecuteNonQuery();
+
+                    SqlCommand cmd2 = new SqlCommand(SQL_SelectProjectID, conn);
+                    cmd2.Parameters.AddWithValue("@name", newProject.Name);
+                    SqlDataReader reader = cmd2.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        newProject.ProjectId = Convert.ToInt32(reader["project_id"]);
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw;
+            }
+
+            return newProject.ProjectId;
         }
 
     }
