@@ -8,9 +8,12 @@ namespace dao_exercises.DAL
 {
     class DepartmentSqlDAL
     {
-        private const string SQL_GetDepartmentNames = "SELECT * FROM department";
+        //private static string departmentName = "";
+        private const string SQL_GetDepartmentNames = @"SELECT * FROM department";
         private const string SQL_InsertDepartment = @"INSERT INTO department (name) VALUES (@name);";
-        private const string SQL_UpdateDepartment = "UPDATE department SET name = @name;";
+        private string SQL_SelectMaxDepartmentID = @"SELECT department_id FROM department WHERE name = @name;";
+        private const string SQL_UpdateDepartment = @"UPDATE department SET name = @name;";
+        
         private string connectionString;
 
         // Single Parameter Constructor
@@ -65,17 +68,24 @@ namespace dao_exercises.DAL
         public int CreateDepartment(Department newDepartment)
         {
             int count = 0;
-
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+
                     SqlCommand cmd = new SqlCommand(SQL_InsertDepartment, conn);
-
                     cmd.Parameters.AddWithValue("@name", newDepartment.Name);
+                    count = cmd.ExecuteNonQuery();
 
-                    count = newDepartment.Id;
+                    SqlCommand cmd2 = new SqlCommand(SQL_SelectMaxDepartmentID, conn);
+                    cmd2.Parameters.AddWithValue("@name", newDepartment.Name);
+                    SqlDataReader reader = cmd2.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        newDepartment.Id = Convert.ToInt32(reader["department_id"]);
+                    }
                 }
             }
             catch (SqlException ex)
@@ -83,7 +93,7 @@ namespace dao_exercises.DAL
                 throw;
             }
 
-            return count;
+            return newDepartment.Id;
         }
 
         /// <summary>
@@ -105,7 +115,7 @@ namespace dao_exercises.DAL
 
                     int count = cmd.ExecuteNonQuery();
 
-                    if (count>0)
+                    if (count > 0)
                     {
                         result = true;
                     }
@@ -113,7 +123,6 @@ namespace dao_exercises.DAL
             }
             catch (SqlException ex)
             {
-
                 throw;
             }
 
