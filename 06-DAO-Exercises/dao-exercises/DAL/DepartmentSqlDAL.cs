@@ -12,7 +12,7 @@ namespace dao_exercises.DAL
         private const string SQL_GetDepartmentNames = @"SELECT * FROM department";
         private const string SQL_InsertDepartment = @"INSERT INTO department (name) VALUES (@name);";
         private string SQL_SelectMaxDepartmentID = @"SELECT department_id FROM department WHERE name = @name;";
-        private const string SQL_UpdateDepartment = @"UPDATE department SET name = @name;";
+        private const string SQL_UpdateDepartment = @"UPDATE department SET name = @name WHERE department_id = @id;";
         
         private string connectionString;
 
@@ -112,6 +112,7 @@ namespace dao_exercises.DAL
                     SqlCommand cmd = new SqlCommand(SQL_UpdateDepartment, conn);
 
                     cmd.Parameters.AddWithValue("@name", updatedDepartment.Name);
+                    cmd.Parameters.AddWithValue("@id", updatedDepartment.Id);
 
                     int count = cmd.ExecuteNonQuery();
 
