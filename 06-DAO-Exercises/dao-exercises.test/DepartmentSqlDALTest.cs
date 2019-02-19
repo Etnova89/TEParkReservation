@@ -14,7 +14,7 @@ namespace dao_exercises.test
         private TransactionScope tran;
         private string connectionString = @"Data Source =.\sqlexpress;Initial Catalog = employeeDB; Integrated Security = True";
         private int departmentCount = 0;
-
+        int maxID = 0;
 
         [TestInitialize]
         public void Initialize()
@@ -29,8 +29,8 @@ namespace dao_exercises.test
                 cmd = new SqlCommand("SELECT COUNT(*) FROM department;", connection);
                 departmentCount = (int)cmd.ExecuteScalar();
 
-                //cmd = new SqlCommand("INSERT INTO department(name) VALUES ('Kyles Place'); SELECT CAST(SCOPE_IDENTITY() as int);", connection);
-                //int KylesPlaceCount = (int)cmd.ExecuteScalar();
+                cmd = new SqlCommand("INSERT INTO department(name) VALUES ('Kyles Place'); SELECT CAST(SCOPE_IDENTITY() as int);", connection);
+                maxID = (int)cmd.ExecuteScalar();
             }
         }
 
@@ -46,7 +46,7 @@ namespace dao_exercises.test
             DepartmentSqlDAL department = new DepartmentSqlDAL(connectionString);
             IList<Department> names = department.GetDepartments();
             Assert.IsNotNull(names);
-            Assert.AreEqual(departmentCount, names.Count);
+            Assert.AreEqual(departmentCount + 1, names.Count);
         }
 
         [TestMethod]
@@ -55,15 +55,12 @@ namespace dao_exercises.test
             DepartmentSqlDAL departmentDAL = new DepartmentSqlDAL(connectionString);
             Department department = new Department
             {
-                Name = "Kyle's Place",
+                Name = "Eric's Place",
             };
 
-            int departmentID = departmentDAL.CreateDepartment(department);
-            IList<Department> names = departmentDAL.GetDepartments();
+            int ericID = departmentDAL.CreateDepartment(department);
 
-            Assert.AreNotEqual(0, departmentID);
-            Assert.IsNotNull(departmentID);
-            Assert.AreEqual(departmentCount +1, names.Count);
+            Assert.AreEqual(maxID + 1, department.Id);
         }
 
         [TestMethod]

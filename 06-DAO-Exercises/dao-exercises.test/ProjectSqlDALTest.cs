@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace dao_exercises.test
 {
     [TestClass]
-    class ProjectSqlDALTest
+    public class ProjectSqlDALTest
     {
         [TestMethod]
         public void TestMethod1()

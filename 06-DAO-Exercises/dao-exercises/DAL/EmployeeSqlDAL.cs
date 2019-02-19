@@ -41,7 +41,6 @@ namespace dao_exercises.DAL
                     while (reader.Read())
                     {
                         Employee employee = new Employee();
-
                         employee.EmployeeId = Convert.ToInt32(reader["employee_id"]);
                         employee.DepartmentId = Convert.ToInt32(reader["department_id"]);
                         employee.JobTitle = Convert.ToString(reader["job_title"]);
