@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace dao_exercises.DAL
 {
-    class EmployeeSqlDAL
+    public class EmployeeSqlDAL
     {
         private string connectionString;
         private const string SQL_GetEmployeeNames = @"SELECT * FROM employee";
@@ -50,7 +50,7 @@ namespace dao_exercises.DAL
                         employee.BirthDate = Convert.ToDateTime(reader["birth_date"]);
                         employee.Gender = Convert.ToString(reader["gender"]);
                         employee.HireDate = Convert.ToDateTime(reader["hire_date"]);
-                        
+
                         output.Add(employee);
                     }
                 }
@@ -72,8 +72,8 @@ namespace dao_exercises.DAL
         /// <returns>A list of employees that match the search.</returns>
         /// 
 
-            //TODO: Finish this
-        
+        //TODO: Finish this
+
         public IList<Employee> Search(string firstname, string lastname)
         {
             List<Employee> employees = new List<Employee>();

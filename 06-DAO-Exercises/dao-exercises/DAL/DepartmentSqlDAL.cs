@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace dao_exercises.DAL
 {
-    class DepartmentSqlDAL
+    public class DepartmentSqlDAL
     {
         //private static string departmentName = "";
         private const string SQL_GetDepartmentNames = @"SELECT * FROM department";

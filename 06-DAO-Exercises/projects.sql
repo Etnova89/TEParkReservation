@@ -23,7 +23,7 @@ CREATE TABLE employee (
 );
 
 CREATE TABLE department (
-	department_id integer identity  NOT NULL,
+	department_id integer IDENTITY  NOT NULL,
 	name varchar(40) UNIQUE NOT NULL,
 	CONSTRAINT pk_department_department_id PRIMARY KEY (department_id)
 );
@@ -53,6 +53,8 @@ INSERT INTO department (name) VALUES ('Department of Redundancy');
 INSERT INTO department (name) VALUES ('Network Administration');
 INSERT INTO department (name) VALUES ('Research and Development');
 INSERT INTO department (name) VALUES ('Store Support');
+
+--INSERT INTO department (name) VALUES ('Human resources');
 
 INSERT INTO project (name, from_date, to_date) VALUES ('Project X', '1961-03-01', '2002-08-31');
 INSERT INTO project (name, from_date, to_date) VALUES ('Forelorn Cupcake', '2010-01-01', '2011-10-15');
