@@ -32,6 +32,8 @@ namespace dao_exercises.test
 
                 cmd = new SqlCommand("INSERT INTO employee(department_id, job_title, first_name, last_name, birth_date, gender, hire_date) VALUES (1, 'Liability', 'Kyle', 'Thomas', '10-12-1992', 'M', '10-12-2017');  SELECT CAST(SCOPE_IDENTITY() as int);", connection);
                 maxID = (int)cmd.ExecuteScalar();
+
+                //cmd = new SqlCommand("INSERT INTO project_employee(project_id, employee_id) VALUES (" )
             }
         }
 
@@ -47,7 +49,7 @@ namespace dao_exercises.test
             EmployeeSqlDAL employee = new EmployeeSqlDAL(connectionString);
             IList<Employee> names = employee.GetAllEmployees();
             Assert.IsNotNull(names);
-            Assert.AreEqual(employeeCount, names.Count);
+            Assert.AreEqual(employeeCount + 1, names.Count);
         }
 
         [TestMethod]
@@ -67,8 +69,16 @@ namespace dao_exercises.test
             };
             IList<Employee> list = employee.Search("Kyle", "Thomas");
             Assert.IsNotNull(list);
-            //Assert.IsTrue(list.Contains(person));
-            //CollectionAssert.Contains(list, person);
+            CollectionAssert.ReferenceEquals(list[list.Count -1], person);
+        }
+
+        [TestMethod]
+        public void EmployeeWithoutProjectTest()
+        {
+            EmployeeSqlDAL employee = new EmployeeSqlDAL(connectionString);
+            IList<Employee> list = employee.GetEmployeesWithoutProjects();
+            Assert.IsTrue(list.Count > 0);
+
         }
     }
 }
