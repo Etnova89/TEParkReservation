@@ -14,11 +14,7 @@ namespace Capstone.DAL
             connectionString = dbConnectionString;
         }
 
-        public List<Park> GetParks()
-        {
-            List<Park> parks = new List<Park>();
-            return parks;
-        }
+ 
 
         public List<Campground> GetCampgrounds(int parkID)
         {
