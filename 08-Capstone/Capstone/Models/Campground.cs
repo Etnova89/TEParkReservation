@@ -4,7 +4,13 @@ using System.Text;
 
 namespace Capstone.Models
 {
-    class Campground
+    public class Campground
     {
+        public int CampgroundID { get; set; }
+        public int ParkID { get; set; }
+        public string CampgroundName { get; set; }
+        public int OpenMonth { get; set; }
+        public int CloseMonth { get; set; }
+        public decimal DailyFee { get; set; }
     }
 }
