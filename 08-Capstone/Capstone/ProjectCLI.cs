@@ -15,40 +15,38 @@ namespace Capstone
 
             while (true)
             {
-                PrintMenu();
+                PrintStartMenu();
                 int maxID = PrintAllParks();
 
                 try
                 {
                     string command = Console.ReadLine();
                     Console.Clear();
-                    int number;
+                    //int number = 0; TODO?
 
-                    //TODO: Find a way to handle this more robustly (possibly with switch)
                     if (command.ToUpper() == "Q")
                     {
                         break;
                     }
-                    //else if (int.TryParse(command, out number))
-                    //{
-                    if (Convert.ToInt32(command) > 0 && Convert.ToInt32(command) <= maxID)
+
+                    else if (Convert.ToInt32(command) > 0 && Convert.ToInt32(command) <= maxID)
                     {
                         PrintParkInformation(Convert.ToInt32(command));
                     }
-                    //}
                     else
                     {
+                        Console.WriteLine("Invalid input. Enter one of the selections below.\n");
                         continue;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Console.WriteLine("Invalid input. Enter one of the selections above.");
                 }
             }
         }
 
-        private void PrintMenu()
+        private void PrintStartMenu()
         {
 
             Console.WriteLine("View Parks Interface");
@@ -87,16 +85,52 @@ namespace Capstone
         {
             ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
             Park park = dal.GetParkInformation(parkID);
-            Console.WriteLine("Park Information Screen.");
+            Console.WriteLine("Park Information Screen");
             Console.WriteLine(park.ParkName);
-            Console.WriteLine("Location:" + park.Location.PadLeft(30));
-            Console.WriteLine("Established:" + park.EstablishedDate.ToShortDateString().PadLeft(30));
-            Console.WriteLine("Area:" + park.AreaInAcres.ToString().PadLeft(30) + " sq km");
-            Console.WriteLine("Annual Visitors:" + park.AnnualVisitors.ToString().PadLeft(30));
+            Console.WriteLine("Location:".PadRight(30) + park.Location);
+            Console.WriteLine("Established:".PadRight(30) + park.EstablishedDate.ToShortDateString());
+            Console.WriteLine("Area:".PadRight(30) + park.AreaInAcres.ToString() + " sq km");
+            Console.WriteLine("Annual Visitors:".PadRight(30) + park.AnnualVisitors.ToString());
             Console.WriteLine();
             Console.WriteLine(park.Description);
             Console.WriteLine();
-
+            PrintParkMenu();
         }
+
+        public void PrintParkMenu()
+        {
+            bool done = false;
+            
+            while (!done)
+            {
+                Console.WriteLine("Select a Command");
+                Console.WriteLine("1) View Campgrounds");
+                Console.WriteLine("2) Search For Reservation");
+                Console.WriteLine("3) Return to Previous Screen");
+                Console.WriteLine();
+
+                int userInput = int.Parse(Console.ReadLine());
+
+                switch (userInput)
+                {
+                    case 1:
+                        PrintCampgrounds();
+                        break;
+
+                    case 2:
+                        SearchForReservation();
+                        break;
+
+                    case 3:
+                        done = true;
+                        break;
+
+                    default:
+                        Console.WriteLine();
+                }
+
+            }
+        }
+
     }
 }

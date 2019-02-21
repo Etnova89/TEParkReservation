@@ -10,6 +10,7 @@ namespace Capstone.DAL
     {
         private string connectionString;
         private const string SQL_GetAllParks = @"SELECT * FROM park;";
+        private const string SQL_GetParkInformation = @"SELECT * FROM park WHERE park_id = @park_ID;";
 
         public ParkSQLDAL(string dbConnectionString)
         {
@@ -56,6 +57,36 @@ namespace Capstone.DAL
         public Park GetParkInformation(int parkID)
         {
             Park park = new Park();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(SQL_GetParkInformation, connection);
+                    command.Parameters.AddWithValue("@park_ID", parkID);
+
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+
+                        park.ParkID = Convert.ToInt32(reader["park_id"]);
+                        park.ParkName = Convert.ToString(reader["name"]);
+                        park.Location = Convert.ToString(reader["location"]);
+                        park.EstablishedDate = Convert.ToDateTime(reader["establish_date"]);
+                        park.AreaInAcres = Convert.ToInt32(reader["area"]);
+                        park.AnnualVisitors = Convert.ToInt32(reader["visitors"]);
+                        park.Description = Convert.ToString(reader["description"]);
+
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return park;
         }
     }
