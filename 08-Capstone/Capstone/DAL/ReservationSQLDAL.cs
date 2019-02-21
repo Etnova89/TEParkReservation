@@ -13,14 +13,7 @@ namespace Capstone.DAL
         {
             connectionString = dbConnectionString;
         }
-
- 
-
-        public List<Campground> GetCampgrounds(int parkID)
-        {
-            List<Campground> campgrounds = new List<Campground>();
-            return campgrounds;
-        }
+        
 
         //TODO: Address this method: ProjectCLI vs SQLDAL?
         //public List<Campsite> SearchCampsites(int campgroundID)

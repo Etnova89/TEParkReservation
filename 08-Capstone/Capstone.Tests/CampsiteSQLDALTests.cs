@@ -8,8 +8,7 @@ using Capstone.DAL;
 
 namespace Capstone.Tests
 {
-    [TestClass]
-    public class ReservationSQLDALTests
+    class CampsiteSQLDALTests
     {
         private TransactionScope tran;
         private string connectionString = @"Data Source=.\sqlexpress;Initial Catalog=NationalParkReservation;Integrated Security=True";
@@ -41,29 +40,12 @@ namespace Capstone.Tests
         }
 
         [TestMethod]
-        public void TrueSearchReservationsTest()
+        public void GetCampsiteTest()
         {
-            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
-            bool trueResult = reservation.SearchReservations(1, new System.DateTime(1980, 7, 4), new System.DateTime(1980, 7, 11));
-            Assert.IsTrue(trueResult);
-        }
-
-        [TestMethod]
-        public void FalseSearchReservationsTest()
-        {
-            // TODO: Add SQL that inserts reservation in 1970
-            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
-            bool falseResult = reservation.SearchReservations(1, new System.DateTime(1970, 7, 4), new System.DateTime(1970, 7, 11));
-            Assert.IsFalse(falseResult);
-        }
-
-        [TestMethod]
-        public void TrueBookReservationTest()
-        {
-            // TODO: Add SQL that inserts reservation in 1970
-            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
-            bool trueResult = reservation.BookReservation(1, "Dale");
-            Assert.IsTrue(trueResult);
+            CampsiteSQLDAL reservation = new CampsiteSQLDAL(connectionString);
+            List<Campsite> campsites = reservation.SearchCampsites(1);
+            Assert.IsNotNull(campsites);
+            Assert.AreEqual(3, campsites.Count);
         }
     }
 }

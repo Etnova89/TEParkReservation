@@ -12,21 +12,38 @@ namespace Capstone
 
         public void RunCli()
         {
-            PrintMenu();
-            int maxID = PrintAllParks();
 
             while (true)
             {
-                string command = Console.ReadLine();
-                Console.Clear();
+                PrintMenu();
+                int maxID = PrintAllParks();
 
-                if (command.ToUpper() == "Q")
+                try
                 {
-                    break;
+                    string command = Console.ReadLine();
+                    Console.Clear();
+                    int number;
+
+                    //TODO: Find a way to handle this more robustly (possibly with switch)
+                    if (command.ToUpper() == "Q")
+                    {
+                        break;
+                    }
+                    //else if (int.TryParse(command, out number))
+                    //{
+                    if (Convert.ToInt32(command) > 0 && Convert.ToInt32(command) <= maxID)
+                    {
+                        PrintParkInformation(Convert.ToInt32(command));
+                    }
+                    //}
+                    else
+                    {
+                        continue;
+                    }
                 }
-                else if (Convert.ToInt32(command) >= 1 && Convert.ToInt32(command) <= maxID)
+                catch (Exception)
                 {
-                    PrintParkInformation(Convert.ToInt32(command));
+                    Console.WriteLine("Invalid input. Enter one of the selections above.");
                 }
             }
         }
@@ -35,9 +52,9 @@ namespace Capstone
         {
 
             Console.WriteLine("View Parks Interface");
-            Console.WriteLine("Select a Park for Further Details.");
+            Console.WriteLine("Select a Park for Further Details");
             Console.WriteLine();
-            
+
         }
 
         private int PrintAllParks()
@@ -74,7 +91,7 @@ namespace Capstone
             Console.WriteLine(park.ParkName);
             Console.WriteLine("Location:" + park.Location.PadLeft(30));
             Console.WriteLine("Established:" + park.EstablishedDate.ToShortDateString().PadLeft(30));
-            Console.WriteLine("Area:" + park.AreaInAcres.ToString().PadLeft(30)+" sq km");
+            Console.WriteLine("Area:" + park.AreaInAcres.ToString().PadLeft(30) + " sq km");
             Console.WriteLine("Annual Visitors:" + park.AnnualVisitors.ToString().PadLeft(30));
             Console.WriteLine();
             Console.WriteLine(park.Description);
