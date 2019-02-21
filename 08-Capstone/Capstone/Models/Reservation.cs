@@ -4,7 +4,13 @@ using System.Text;
 
 namespace Capstone.Models
 {
-    class Reservation
+    public class Reservation
     {
+        public int ReservationID { get; set; }
+        public int SiteID { get; set; }
+        public string ReservationName { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }

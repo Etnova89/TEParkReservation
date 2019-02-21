@@ -4,7 +4,13 @@ using System.Text;
 
 namespace Capstone
 {
-    class ProjectCLI
+    public class ProjectCLI
     {
+        const string DatabaseConnection = @"Data Source=.\sqlexpress;Initial Catalog=NationalParkReservation;Integrated Security=True";
+
+        public void RunCli()
+        {
+
+        }
     }
 }
