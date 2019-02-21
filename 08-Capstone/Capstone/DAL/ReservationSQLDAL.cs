@@ -26,11 +26,12 @@ namespace Capstone.DAL
             return campgrounds;
         }
 
-        public List<Campsite> GetAvailableCampsite(int campgroundID)
-        {
-            List<Campsite> campsites = new List<Campsite>();
-            return campsites;
-        }
+        //TODO: Address this method: ProjectCLI vs SQLDAL?
+        //public List<Campsite> SearchCampsites(int campgroundID)
+        //{
+        //    List<Campsite> campsites = new List<Campsite>();
+        //    return campsites;
+        //}
 
         public bool SearchReservations(int campgroundID, DateTime arrivalDate, DateTime departureDate)
         {

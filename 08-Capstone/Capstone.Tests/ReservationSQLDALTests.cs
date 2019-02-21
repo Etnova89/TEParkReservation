@@ -43,14 +43,45 @@ namespace Capstone.Tests
         [TestMethod]
         public void GetParksTest()
         {
-            ReservationSQLDAL reservationDAL = new ReservationSQLDAL(connectionString);
-            List<Park> parks = reservationDAL.GetParks();
+            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
+            List<Park> parks = reservation.GetParks();
             Assert.IsNotNull(parks);
             Assert.AreEqual(3, parks.Count);
         }
 
-        //[TestMethod]
-        //public void 
+        [TestMethod]
+        public void GetCampgroundsTest()
+        {
+            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
+            List<Campground> campgrounds = reservation.GetCampgrounds(1);
+            Assert.IsNotNull(campgrounds);
+            Assert.AreEqual(3, campgrounds.Count);
+        }
 
+        [TestMethod]
+        public void TrueSearchReservationsTest()
+        {
+            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
+            bool trueResult = reservation.SearchReservations(1, new System.DateTime(1980, 7, 4), new System.DateTime(1980, 7, 11));
+            Assert.IsTrue(trueResult);
+        }
+
+        [TestMethod]
+        public void FalseSearchReservationsTest()
+        {
+            // TODO: Add SQL that inserts reservation in 1970
+            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
+            bool falseResult = reservation.SearchReservations(1, new System.DateTime(1970, 7, 4), new System.DateTime(1970, 7, 11));
+            Assert.IsFalse(falseResult);
+        }
+
+        [TestMethod]
+        public void TrueBookReservationTest()
+        {
+            // TODO: Add SQL that inserts reservation in 1970
+            ReservationSQLDAL reservation = new ReservationSQLDAL(connectionString);
+            bool trueResult = reservation.BookReservation(1, "Dale");
+            Assert.IsTrue(trueResult);
+        }
     }
 }
