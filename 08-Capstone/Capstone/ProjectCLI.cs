@@ -81,27 +81,13 @@ namespace Capstone
             return MaxID;
         }
 
-        public void PrintParkInformation(int parkID)
-        {
-            ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
-            Park park = dal.GetParkInformation(parkID);
-            Console.WriteLine("Park Information Screen");
-            Console.WriteLine(park.ParkName);
-            Console.WriteLine("Location:".PadRight(30) + park.Location);
-            Console.WriteLine("Established:".PadRight(30) + park.EstablishedDate.ToShortDateString());
-            Console.WriteLine("Area:".PadRight(30) + park.AreaInAcres.ToString() + "Acres");
-            Console.WriteLine("Annual Visitors:".PadRight(30) + park.AnnualVisitors.ToString());
-            Console.WriteLine();
-            Console.WriteLine(park.Description);
-            Console.WriteLine();
-        }
-
         public void PrintParkMenu(int parkID)
         {
             bool done = false;
             int userInput = 0;
             while (!done)
             {
+                PrintParkInformation(parkID);
                 Console.WriteLine("Select a Command");
                 Console.WriteLine("1) View Campgrounds");
                 Console.WriteLine("2) Search For Reservation");
@@ -140,6 +126,21 @@ namespace Capstone
             }
         }
 
+        public void PrintParkInformation(int parkID)
+        {
+            ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
+            Park park = dal.GetParkInformation(parkID);
+            Console.WriteLine("Park Information Screen");
+            Console.WriteLine(park.ParkName);
+            Console.WriteLine("Location:".PadRight(30) + park.Location);
+            Console.WriteLine("Established:".PadRight(30) + park.EstablishedDate.ToShortDateString());
+            Console.WriteLine("Area:".PadRight(30) + park.AreaInAcres.ToString() + "Acres");
+            Console.WriteLine("Annual Visitors:".PadRight(30) + park.AnnualVisitors.ToString());
+            Console.WriteLine();
+            Console.WriteLine(park.Description);
+            Console.WriteLine();
+        }
+
         public void PrintCampgrounds(int parkID)
         {
             CampgroundSQLDAL dal = new CampgroundSQLDAL(DatabaseConnection);
@@ -147,8 +148,8 @@ namespace Capstone
 
             if (campgrounds.Count > 0)
             {
-                Console.WriteLine("Name".PadLeft(11).PadRight(28) + "Open".PadRight(16) +  "Close".PadRight(16) +"Fee");
-                Console.WriteLine(new String('=',66));
+                Console.WriteLine("Name".PadLeft(11).PadRight(28) + "Open".PadRight(16) + "Close".PadRight(16) + "Fee");
+                Console.WriteLine(new String('=', 66));
                 foreach (Campground campground in campgrounds)
                 {
                     Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(20)} {campground.OpenMonth.ToString().PadRight(15)} {campground.CloseMonth.ToString().PadRight(15)} {campground.DailyFee.ToString("C2")}");
@@ -201,6 +202,18 @@ namespace Capstone
 
         public void SearchForReservation(int parkID)
         {
+            Reservation reservation = new Reservation();
+
+            Console.WriteLine("Search for Campground Reservation");
+            PrintCampgrounds(parkID);
+            Console.WriteLine();
+            Console.WriteLine("Which campground? (enter 0 to cancel)");
+            int campgroundID = int.Parse(Console.ReadLine());
+            Console.WriteLine("What is the arrival date? (DD/MM/YYYY)");
+            DateTime arrivalDate = DateTime.Parse(Console.ReadLine());
+            Console.WriteLine("What is the departure date? (DD/MM/YYYY)");
+            DateTime departureDate = DateTime.Parse(Console.ReadLine());
+
 
         }
     }
