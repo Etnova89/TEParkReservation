@@ -240,6 +240,7 @@ namespace Capstone
                 }
                 Console.WriteLine();
 
+                BookingMenu(campgroundID, arrivalDate, departureDate);
             }
             else
             {
@@ -247,14 +248,32 @@ namespace Capstone
             }
         }
 
-        public void BookingMenu()
+        public void BookingMenu(int campgroundID, DateTime arrivalDate, DateTime departureDate)
         {
-            Console.WriteLine();
-            Console.WriteLine("Which Site Should be Reserved? (0 To Cancel)");
-            int siteNumber = int.Parse(Console.ReadLine());
-            Console.WriteLine("What Name Should the Reservation be Made Under?");
-            string reservationName = Console.ReadLine();
+            int reservationID = 0;
+            ReservationSQLDAL dal = new ReservationSQLDAL(DatabaseConnection);
+            bool done = false;
 
+            while (!done)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Which Site Should be Reserved? (0 To Cancel)");
+                int siteNumber = int.Parse(Console.ReadLine());
+                Console.WriteLine("What Name Should the Reservation be Made Under?");
+                string reservationName = Console.ReadLine();
+
+                reservationID = dal.BookReservation(siteNumber, campgroundID, arrivalDate, departureDate, reservationName);
+
+                if (reservationID > 0)
+                {
+                    Console.WriteLine($"The reservation has been made and the confirmation id is {reservationID}");
+                    done = true;
+                }
+                else
+                {
+                    Console.WriteLine("Error making reservation. Please try again.");
+                }
+            }
         }
     }
 }
