@@ -225,13 +225,20 @@ namespace Capstone
 
             if (campsites.Count > 0)
             {
+                Console.WriteLine();
                 Console.WriteLine("Results Matching Your Search Criteria");
-                Console.WriteLine("TODO");
+                Console.WriteLine("Site No.".PadRight(10) + "Max Occupancy".PadRight(15) + "Accessible?".PadRight(15) + "Max RV Length".PadRight(15) + "Utility".PadRight(15) + "Cost");
                 foreach (Campsite campsite in campsites)
                 {
-                    decimal totalFee = CLIHelper.GetTotalFee(campsite.DailyFee, arrivalDate,  departureDate);
-                    Console.WriteLine(campsite.SiteNumber.ToString().PadRight(5) + campsite.MaxOccupancy.ToString().PadRight(5) + campsite.Accessible.ToString().PadRight(10) + campsite.MaxRVLength.ToString().PadRight(10) + campsite.Utilities.ToString().PadRight(10) + totalFee.ToString("C2"));
+                    decimal totalFee = CLIHelper.GetTotalFee(campsite.DailyFee, arrivalDate, departureDate);
+                    Console.Write(campsite.SiteNumber.ToString().PadRight(10));
+                    Console.Write(campsite.MaxOccupancy.ToString().PadRight(15));
+                    Console.Write((campsite.Accessible == true ? "YES" : "NO").PadRight(15));
+                    Console.Write((campsite.MaxRVLength != 0 ? campsite.MaxRVLength.ToString() : "N/A").PadRight(15));
+                    Console.Write((campsite.Utilities == true ? "YES" : "N/A").PadRight(15));
+                    Console.WriteLine(totalFee.ToString("C2"));
                 }
+                Console.WriteLine();
             }
             else
             {

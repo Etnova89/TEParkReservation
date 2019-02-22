@@ -22,10 +22,10 @@ namespace Capstone.DAL
             return false;
         }
 
-        public bool BookReservation(int campsiteID, string reservationName)
+        public int BookReservation(int campsiteID, string reservationName)
         {
-            bool result = false;
-            return result;
+            int reservationID = 0;
+            return reservationID;
         }
 
 
