@@ -239,11 +239,22 @@ namespace Capstone
                     Console.WriteLine(totalFee.ToString("C2"));
                 }
                 Console.WriteLine();
+
             }
             else
             {
                 Console.WriteLine("");
             }
+        }
+
+        public void BookingMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Which Site Should be Reserved? (0 To Cancel)");
+            int siteNumber = int.Parse(Console.ReadLine());
+            Console.WriteLine("What Name Should the Reservation be Made Under?");
+            string reservationName = Console.ReadLine();
+
         }
     }
 }
