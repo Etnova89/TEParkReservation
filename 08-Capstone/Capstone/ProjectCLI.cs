@@ -31,7 +31,7 @@ namespace Capstone
 
                     else if (Convert.ToInt32(command) > 0 && Convert.ToInt32(command) <= maxID)
                     {
-                        PrintParkInformation(Convert.ToInt32(command));
+                        PrintParkMenu(Convert.ToInt32(command));
                     }
                     else
                     {
@@ -94,7 +94,6 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine(park.Description);
             Console.WriteLine();
-            PrintParkMenu(parkID);
         }
 
         public void PrintParkMenu(int parkID)
@@ -115,7 +114,6 @@ namespace Capstone
                 }
                 catch (Exception)
                 {
-
                     userInput = 0;
                 }
 
@@ -123,6 +121,7 @@ namespace Capstone
                 {
                     case 1:
                         PrintCampgrounds(parkID);
+                        PrintCampgroundMenu(parkID);
                         break;
 
                     case 2:
@@ -145,27 +144,59 @@ namespace Capstone
         {
             CampgroundSQLDAL dal = new CampgroundSQLDAL(DatabaseConnection);
             List<Campground> campgrounds = dal.GetAllCampgrounds(parkID);
-            //int MaxID = 0;
 
             if (campgrounds.Count > 0)
             {
-                Console.WriteLine("name, open, close, fee");
+                Console.WriteLine("Name".PadLeft(11).PadRight(28) + "Open".PadRight(16) +  "Close".PadRight(16) +"Fee");
+                Console.WriteLine(new String('=',66));
                 foreach (Campground campground in campgrounds)
                 {
                     Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(20)} {campground.OpenMonth.ToString().PadRight(15)} {campground.CloseMonth.ToString().PadRight(15)} {campground.DailyFee.ToString("C2")}");
-                    //if (campground.ID > MaxID)
-                    //{
-                    //    MaxID = park.ParkID;
-                    //}
                 }
                 Console.WriteLine();
-                Console.WriteLine("Q) quit");
             }
             else
             {
                 Console.WriteLine("NO RESULTS");
             }
-            //return MaxID;
+        }
+
+        public void PrintCampgroundMenu(int parkID)
+        {
+            bool done = false;
+            int userInput = 0;
+            while (!done)
+            {
+                Console.WriteLine("Select a Command");
+                Console.WriteLine("1) Search For Available Reservations");
+                Console.WriteLine("2) Return to Previous Screen");
+                Console.WriteLine();
+
+                try
+                {
+                    userInput = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    userInput = 0;
+                }
+
+                switch (userInput)
+                {
+                    case 1:
+                        SearchForReservation(parkID);
+                        break;
+
+                    case 2:
+                        done = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Input. Please Enter 1, 2, or 3.");
+                        break;
+                }
+
+            }
         }
 
         public void SearchForReservation(int parkID)
