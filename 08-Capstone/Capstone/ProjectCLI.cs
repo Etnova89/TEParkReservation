@@ -209,12 +209,34 @@ namespace Capstone
             Console.WriteLine();
             Console.WriteLine("Which campground? (enter 0 to cancel)");
             int campgroundID = int.Parse(Console.ReadLine());
-            Console.WriteLine("What is the arrival date? (DD/MM/YYYY)");
+            Console.WriteLine("What is the arrival date? (MM/DD/YYYY)");
             DateTime arrivalDate = DateTime.Parse(Console.ReadLine());
-            Console.WriteLine("What is the departure date? (DD/MM/YYYY)");
+            Console.WriteLine("What is the departure date? (MM/DD/YYYY)");
             DateTime departureDate = DateTime.Parse(Console.ReadLine());
 
+            PrintAvailableCampsites(campgroundID, arrivalDate, departureDate);
+        }
 
+        public void PrintAvailableCampsites(int campgroundID, DateTime arrivalDate, DateTime departureDate)
+        {
+            CampsiteSQLDAL dal = new CampsiteSQLDAL(DatabaseConnection);
+
+            List<Campsite> campsites = dal.SearchCampsites(campgroundID, arrivalDate, departureDate);
+
+            if (campsites.Count > 0)
+            {
+                Console.WriteLine("Results Matching Your Search Criteria");
+                Console.WriteLine("TODO");
+                foreach (Campsite campsite in campsites)
+                {
+                    decimal totalFee = CLIHelper.GetTotalFee(campsite.DailyFee, arrivalDate,  departureDate);
+                    Console.WriteLine(campsite.SiteNumber.ToString().PadRight(5) + campsite.MaxOccupancy.ToString().PadRight(5) + campsite.Accessible.ToString().PadRight(10) + campsite.MaxRVLength.ToString().PadRight(10) + campsite.Utilities.ToString().PadRight(10) + totalFee.ToString("C2"));
+                }
+            }
+            else
+            {
+                Console.WriteLine("");
+            }
         }
     }
 }
