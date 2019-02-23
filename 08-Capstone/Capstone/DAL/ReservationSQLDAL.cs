@@ -20,7 +20,7 @@ namespace Capstone.DAL
 		             FROM site
 		             WHERE campground_id = @campgroundID
 			            AND site_number = @siteNumber));
-            SELECT CAST(SCOPE_IDENTITY) as int;";
+            SELECT CAST(SCOPE_IDENTITY() as int);";
 
         //TODO: Address this method: ProjectCLI vs SQLDAL?
         //public List<Campsite> SearchCampsites(int campgroundID)

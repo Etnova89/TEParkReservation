@@ -10,7 +10,7 @@ namespace Capstone.DAL
     {
         private string connectionString;
         private const string SQL_SearchReservations =
-            @"SELECT TOP 5
+            @"SELECT DISTINCT TOP 5
 	            site_number,
 	            max_occupancy,
 	            accessible,

@@ -223,6 +223,8 @@ namespace Capstone
 
             List<Campsite> campsites = dal.SearchCampsites(campgroundID, arrivalDate, departureDate);
 
+
+            //TODO: TOP PRIORITY!!! Fix error causing site 1 to display twice
             if (campsites.Count > 0)
             {
                 Console.WriteLine();
