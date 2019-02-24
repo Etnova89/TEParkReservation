@@ -14,8 +14,8 @@ namespace Capstone
 
         public void RunCli()
         {
-
-            while (true)
+            bool done = false;
+            while (!done)
             {
                 PrintStartMenu();
                 int maxID = PrintAllParks();
@@ -23,11 +23,12 @@ namespace Capstone
                 try
                 {
                     string command = Console.ReadLine();
-                    Console.Clear();
                     //int number = 0; TODO?
+
 
                     if (command.ToUpper() == "Q")
                     {
+                        done = true;
                         break;
                     }
 
@@ -57,6 +58,7 @@ namespace Capstone
 
         }
 
+        // TODO: CLI methods should not be testable, so they should be void
         private int PrintAllParks()
         {
             ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
