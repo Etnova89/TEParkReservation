@@ -10,8 +10,23 @@ namespace Capstone.DAL
     {
         private string connectionString;
         private const string SQL_SearchReservations =
-            @"SELECT DISTINCT TOP 5
-	            site_number,
+            @"DECLARE
+            @topNumber int = (SELECT COUNT(*)
+            FROM site
+            JOIN campground ON site.campground_id = campground.campground_id
+            JOIN reservation ON site.site_id = reservation.site_id
+            WHERE campground.campground_id = @campgroundID AND NOT
+                    ((CASE WHEN @arrivalDate > from_date
+                        THEN @arrivalDate
+                        ELSE from_date
+                        END) >=
+					(CASE WHEN @departureDate<to_date
+                        THEN @departureDate
+                        ELSE to_date
+                        END)))
+;
+            SELECT DISTINCT TOP(@topNumber + 5)
+                site_number,
 	            max_occupancy,
 	            accessible,
 	            max_rv_length,
@@ -22,9 +37,33 @@ namespace Capstone.DAL
             FROM site
             JOIN campground ON site.campground_id = campground.campground_id
             JOIN reservation ON site.site_id = reservation.site_id
-            WHERE	campground.campground_id = @campgroundID AND
-		            @arrivalDate NOT BETWEEN to_date AND from_date AND
-		            @departureDate NOT BETWEEN to_date AND from_date
+            WHERE campground.campground_id = @campgroundID
+
+            EXCEPT
+
+            SELECT
+                site_number,
+                max_occupancy,
+                accessible,
+                max_rv_length,
+                utilities,
+
+                campground.daily_fee,
+                site.campground_id,
+                site.site_id
+            FROM site
+            JOIN campground ON site.campground_id = campground.campground_id
+            JOIN reservation ON site.site_id = reservation.site_id
+            WHERE campground.campground_id = @campgroundID AND NOT
+                    ((CASE WHEN @arrivalDate > from_date
+                        THEN @arrivalDate
+                        ELSE from_date
+                        END) >=
+					(CASE WHEN @departureDate<to_date
+                        THEN @departureDate
+                        ELSE to_date
+                        END))
+			
             ORDER BY site_number;";
 
         public CampsiteSQLDAL(string dbConnectionString)
