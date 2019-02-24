@@ -1,10 +1,10 @@
 DECLARE 
 @campgroundID int = 1,
-@arrivalDate DATETIME = '2019-01-01',
-@departureDate DATETIME = '2019-02-01'
+@arrivalDate DATETIME = '2019-01-02',
+@departureDate DATETIME = '2019-01-30'
 ;
 
-SELECT DISTINCT TOP 5
+SELECT --TOP 5
 	            site_number,
 	            max_occupancy,
 	            accessible,
@@ -12,18 +12,17 @@ SELECT DISTINCT TOP 5
 	            utilities,
 	            campground.daily_fee,
                 site.campground_id,
-                site.site_id
+                site.site_id,
+				CASE
+					WHEN (@arrivalDate BETWEEN to_date AND from_date) OR (@departureDate BETWEEN to_date AND from_date) THEN 1
+					ELSE 0
+				END AS is_booked
             FROM site
             JOIN campground ON site.campground_id = campground.campground_id
             JOIN reservation ON site.site_id = reservation.site_id
-			campground.campground_id = @campgroundID
-            EXCEPT 
-			(
-					SELECT site_id
-					FROM reservation
-					WHERE
-		            @arrivalDate BETWEEN to_date AND from_date AND
-		            @departureDate BETWEEN to_date AND from_date
-			) 
+			WHERE campground.campground_id = @campgroundID /*AND
+		            @arrivalDate NOT BETWEEN to_date AND from_date AND
+		            @departureDate NOT BETWEEN to_date AND from_date*/
+			
 
             ORDER BY site_number;

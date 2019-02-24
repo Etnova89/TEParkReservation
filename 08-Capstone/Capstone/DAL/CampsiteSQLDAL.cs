@@ -10,61 +10,25 @@ namespace Capstone.DAL
     {
         private string connectionString;
         private const string SQL_SearchReservations =
-            @"DECLARE
-            @topNumber int = (SELECT COUNT(*)
-            FROM site
-            JOIN campground ON site.campground_id = campground.campground_id
-            JOIN reservation ON site.site_id = reservation.site_id
-            WHERE campground.campground_id = @campgroundID AND NOT
-                    ((CASE WHEN @arrivalDate > from_date
-                        THEN @arrivalDate
-                        ELSE from_date
-                        END) >=
-					(CASE WHEN @departureDate<to_date
-                        THEN @departureDate
-                        ELSE to_date
-                        END)))
-;
-            SELECT DISTINCT TOP(@topNumber + 5)
-                site_number,
-	            max_occupancy,
-	            accessible,
-	            max_rv_length,
-	            utilities,
-	            campground.daily_fee,
-                site.campground_id,
-                site.site_id
-            FROM site
-            JOIN campground ON site.campground_id = campground.campground_id
-            JOIN reservation ON site.site_id = reservation.site_id
-            WHERE campground.campground_id = @campgroundID
+            @"SELECT top 5
+            site_number,
+            max_occupancy,
+            accessible,
+            max_rv_length,
+            utilities,
+            s.campground_id,
+            s.site_id,
+			c.daily_fee
 
-            EXCEPT
-
-            SELECT
-                site_number,
-                max_occupancy,
-                accessible,
-                max_rv_length,
-                utilities,
-
-                campground.daily_fee,
-                site.campground_id,
-                site.site_id
-            FROM site
-            JOIN campground ON site.campground_id = campground.campground_id
-            JOIN reservation ON site.site_id = reservation.site_id
-            WHERE campground.campground_id = @campgroundID AND NOT
-                    ((CASE WHEN @arrivalDate > from_date
-                        THEN @arrivalDate
-                        ELSE from_date
-                        END) >=
-					(CASE WHEN @departureDate<to_date
-                        THEN @departureDate
-                        ELSE to_date
-                        END))
-			
-            ORDER BY site_number;";
+            FROM site s
+			JOIN campground c on s.campground_id = c.campground_id
+            where s.campground_id = @campground_id
+            AND s.site_id NOT IN
+            (
+            SELECT s.site_id from reservation r
+            JOIN site s on r.site_id = s.site_id
+            WHERE s.campground_id = @campground_id
+            AND r.to_date > @req_from_date AND r.from_date < @req_to_date)";
 
         public CampsiteSQLDAL(string dbConnectionString)
         {
@@ -85,9 +49,9 @@ namespace Capstone.DAL
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand(SQL_SearchReservations, connection);
-                    command.Parameters.AddWithValue("@campgroundID", campgroundID);
-                    command.Parameters.AddWithValue("@arrivalDate", reservation.FromDate);
-                    command.Parameters.AddWithValue("@departureDate", reservation.ToDate);
+                    command.Parameters.AddWithValue("@campground_id", campgroundID);
+                    command.Parameters.AddWithValue("@req_from_date", reservation.FromDate);
+                    command.Parameters.AddWithValue("@req_to_date", reservation.ToDate);
 
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())

@@ -3,6 +3,8 @@ using Capstone.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace Capstone
 {
@@ -148,11 +150,11 @@ namespace Capstone
 
             if (campgrounds.Count > 0)
             {
-                Console.WriteLine("Name".PadLeft(11).PadRight(28) + "Open".PadRight(16) + "Close".PadRight(16) + "Fee");
-                Console.WriteLine(new String('=', 66));
+                Console.WriteLine("Name".PadLeft(11).PadRight(33) + "Open".PadRight(15) + "Close".PadRight(15) + "Fee");
+                Console.WriteLine(new String('=', 69)); 
                 foreach (Campground campground in campgrounds)
                 {
-                    Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(20)} {campground.OpenMonth.ToString().PadRight(15)} {campground.CloseMonth.ToString().PadRight(15)} {campground.DailyFee.ToString("C2")}");
+                    Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(25)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.OpenMonth).PadRight(14)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.CloseMonth).PadRight(14)} {campground.DailyFee.ToString("C2")}");
                 }
                 Console.WriteLine();
             }
@@ -202,19 +204,31 @@ namespace Capstone
 
         public void SearchForReservation(int parkID)
         {
-            Reservation reservation = new Reservation();
+            bool done = false;
 
-            Console.WriteLine("Search for Campground Reservation");
-            PrintCampgrounds(parkID);
-            Console.WriteLine();
-            Console.WriteLine("Which campground? (enter 0 to cancel)");
-            int campgroundID = int.Parse(Console.ReadLine());
-            Console.WriteLine("What is the arrival date? (MM/DD/YYYY)");
-            DateTime arrivalDate = DateTime.Parse(Console.ReadLine());
-            Console.WriteLine("What is the departure date? (MM/DD/YYYY)");
-            DateTime departureDate = DateTime.Parse(Console.ReadLine());
+            while (!done)
+            {
 
-            PrintAvailableCampsites(campgroundID, arrivalDate, departureDate);
+
+                Reservation reservation = new Reservation();
+
+                Console.WriteLine("Search for Campground Reservation");
+                PrintCampgrounds(parkID);
+                Console.WriteLine();
+                Console.WriteLine("Which campground? (enter 0 to cancel)");
+                int campgroundID = int.Parse(Console.ReadLine());
+                if (campgroundID == 0)
+                {
+                    done = true;
+                    break;
+                }
+                Console.WriteLine("What is the arrival date? (MM/DD/YYYY)");
+                DateTime arrivalDate = DateTime.Parse(Console.ReadLine());
+                Console.WriteLine("What is the departure date? (MM/DD/YYYY)");
+                DateTime departureDate = DateTime.Parse(Console.ReadLine());
+
+                PrintAvailableCampsites(campgroundID, arrivalDate, departureDate);
+            }
         }
 
         public void PrintAvailableCampsites(int campgroundID, DateTime arrivalDate, DateTime departureDate)
@@ -223,8 +237,6 @@ namespace Capstone
 
             List<Campsite> campsites = dal.SearchCampsites(campgroundID, arrivalDate, departureDate);
 
-
-            //TODO: TOP PRIORITY!!! Fix error causing site 1 to display twice
             if (campsites.Count > 0)
             {
                 Console.WriteLine();
@@ -246,7 +258,8 @@ namespace Capstone
             }
             else
             {
-                Console.WriteLine("");
+                Console.WriteLine("No available sites. Would you like to enter an alternate date range?");
+                Console.WriteLine();
             }
         }
 
@@ -261,6 +274,11 @@ namespace Capstone
                 Console.WriteLine();
                 Console.WriteLine("Which Site Should be Reserved? (0 To Cancel)");
                 int siteNumber = int.Parse(Console.ReadLine());
+                if (siteNumber == 0)
+                {
+                    done = true;
+                    break;
+                }
                 Console.WriteLine("What Name Should the Reservation be Made Under?");
                 string reservationName = Console.ReadLine();
 
