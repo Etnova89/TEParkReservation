@@ -37,7 +37,11 @@ namespace Capstone
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Invalid input. Enter one of the selections above.");
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid input. Press enter to continue.");
+                    Console.WriteLine();
+                    Console.ReadLine();
+                    Console.WriteLine();
                 }
             }
         }
@@ -50,7 +54,7 @@ namespace Capstone
             Console.WriteLine();
 
         }
-        
+
         public void PrintAllParks()
         {
             ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
@@ -116,14 +120,22 @@ namespace Capstone
                             break;
 
                         default:
-                            Console.WriteLine("Invalid Input. Please Enter 1, 2, or 3.");
+                            Console.WriteLine();
+                            Console.WriteLine("Invalid Input. Press enter to continue.");
+                            Console.WriteLine();
+                            Console.ReadLine();
+                            Console.WriteLine();
                             break;
                     }
                 }
 
                 else
                 {
-                    Console.WriteLine("Invalid Selection.");
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid Input. Press enter to continue.");
+                    Console.WriteLine();
+                    Console.ReadLine();
+                    Console.WriteLine();
                     done = true;
                 }
             }
@@ -150,14 +162,18 @@ namespace Capstone
             }
             else
             {
-                Console.WriteLine("Invalid Input.");
+                Console.WriteLine();
+                Console.WriteLine("Invalid Input. Press enter to continue.");
+                Console.WriteLine();
+                Console.ReadLine();
+                Console.WriteLine();
             }
         }
 
         public void PrintCampgrounds(int parkID)
         {
             CampgroundSQLDAL dal = new CampgroundSQLDAL(DatabaseConnection);
-            List<Campground> campgrounds = dal.GetAllCampgrounds(parkID);
+            List<Campground> campgrounds = CampgroundSQLDAL.GetAllCampgrounds(parkID);
 
             if (campgrounds.Count > 0)
             {
@@ -172,7 +188,9 @@ namespace Capstone
             }
             else
             {
+                Console.WriteLine();
                 Console.WriteLine("NO RESULTS");
+                Console.WriteLine();
             }
         }
 
@@ -208,7 +226,11 @@ namespace Capstone
                         break;
 
                     default:
-                        Console.WriteLine("Invalid Input. Please Enter 1, 2, or 3.");
+                        Console.WriteLine();
+                        Console.WriteLine("Invalid Input. Press enter to continue.");
+                        Console.WriteLine();
+                        Console.ReadLine();
+                        Console.WriteLine();
                         break;
                 }
 
@@ -236,10 +258,26 @@ namespace Capstone
                     done = true;
                     break;
                 }
+                else if (!(CampgroundSQLDAL.GetAvailableCampgrounds(parkID, campgroundID)))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Not a valid selection. Press enter to continue.");
+                    Console.WriteLine();
+                    Console.ReadLine();
+                    continue;
+                }
                 Console.WriteLine("What is the arrival date? (MM/DD/YYYY)");
                 DateTime arrivalDate = DateTime.Parse(Console.ReadLine());
                 Console.WriteLine("What is the departure date? (MM/DD/YYYY)");
                 DateTime departureDate = DateTime.Parse(Console.ReadLine());
+
+                if (arrivalDate > departureDate)
+                {
+                    Console.WriteLine("Invalid date selection. Press enter to continue.");
+                    Console.WriteLine();
+                    Console.ReadLine();
+                    continue;
+                }
 
                 PrintAvailableCampsites(campgroundID, arrivalDate, departureDate);
             }
@@ -249,7 +287,7 @@ namespace Capstone
         {
             CampsiteSQLDAL dal = new CampsiteSQLDAL(DatabaseConnection);
 
-            List<Campsite> campsites = dal.SearchCampsites(campgroundID, arrivalDate, departureDate);
+            List<Campsite> campsites = CampsiteSQLDAL.SearchCampsites(campgroundID, arrivalDate, departureDate);
 
             if (campsites.Count > 0)
             {
@@ -295,6 +333,15 @@ namespace Capstone
                     done = true;
                     break;
                 }
+                else if (!(CampsiteSQLDAL.GetAvailableCampsites(campgroundID, arrivalDate, departureDate, siteNumber)))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Not a valid selection. Press enter to continue.");
+                    Console.WriteLine();
+                    Console.ReadLine();
+                    continue;
+                }
+
                 Console.WriteLine("What Name Should the Reservation be Made Under?");
                 string reservationName = Console.ReadLine();
 

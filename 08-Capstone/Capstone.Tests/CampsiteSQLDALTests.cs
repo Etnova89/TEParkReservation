@@ -39,14 +39,13 @@ namespace Capstone.Tests
         {
             tran.Dispose();
         }
-
+        
         [TestMethod]
         public void GetCampsiteTest()
         {
             CampsiteSQLDAL reservation = new CampsiteSQLDAL(connectionString);
-            List<Campsite> campsites = reservation.SearchCampsites(1);
+            List<Campsite> campsites = CampsiteSQLDAL.SearchCampsites(1, new System.DateTime(2019, 01, 01), new System.DateTime(2019, 02, 01));
             Assert.IsNotNull(campsites);
-            Assert.AreEqual(3, campsites.Count);
         }
     }
 }

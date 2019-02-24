@@ -27,11 +27,6 @@ namespace Capstone.DAL
             connectionString = dbConnectionString;
         }
 
-        public bool BadSearchReservations(int siteNumber, int campgroundID, DateTime arrivalDate, DateTime departureDate, string reservationName)
-        {
-            return false;
-        }
-
         public int BookReservation(int siteNumber, int campgroundID, DateTime arrivalDate, DateTime departureDate, string reservationName)
         {
             int reservationID = 0;
@@ -59,7 +54,5 @@ namespace Capstone.DAL
 
             return reservationID;
         }
-
-
     }
 }

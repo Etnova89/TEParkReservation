@@ -8,7 +8,7 @@ namespace Capstone.DAL
 {
     public class CampsiteSQLDAL
     {
-        private string connectionString;
+        private static string connectionString;
         private const string SQL_SearchReservations =
             @"SELECT top 5
             site_number,
@@ -35,7 +35,7 @@ namespace Capstone.DAL
             connectionString = dbConnectionString;
         }
 
-        public List<Campsite> SearchCampsites(int campgroundID, DateTime arrivalDate, DateTime departureDate)
+        public static List<Campsite> SearchCampsites(int campgroundID, DateTime arrivalDate, DateTime departureDate)
         {
             List<Campsite> campsites = new List<Campsite>();
 
@@ -79,6 +79,27 @@ namespace Capstone.DAL
             }
 
             return campsites;
+        }
+
+        public static bool GetAvailableCampsites(int campgroundID, DateTime arrivalDate, DateTime departureDate, int siteNumber)
+        {
+            bool result = false;
+
+            List<int> campsiteIDList = new List<int>();
+
+            List<Campsite> campsites = SearchCampsites(campgroundID, arrivalDate, departureDate);
+
+            foreach (Campsite campsite in campsites)
+            {
+                campsiteIDList.Add(campsite.SiteNumber);
+            }
+
+            if (campsiteIDList.Contains(siteNumber))
+            {
+                result = true;
+            }
+
+            return result;
         }
     }
 }

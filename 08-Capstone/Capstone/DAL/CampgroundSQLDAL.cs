@@ -8,14 +8,14 @@ namespace Capstone.DAL
 {
     public class CampgroundSQLDAL
     {
-        private string connectionString;
+        private static string connectionString;
         private const string SQL_GetAllCampgrounds = @"SELECT * FROM campground WHERE park_id = @parkID";
         public CampgroundSQLDAL(string dbConnectionString)
         {
             connectionString = dbConnectionString;
         }
 
-        public List<Campground> GetAllCampgrounds(int parkID)
+        public static List<Campground> GetAllCampgrounds(int parkID)
         {
             List<Campground> campgrounds = new List<Campground>();
             try
@@ -49,6 +49,27 @@ namespace Capstone.DAL
                 throw;
             }
             return campgrounds;
+        }
+
+        public static bool GetAvailableCampgrounds(int parkID, int campgroundID)
+        {
+            bool result = false;
+
+            List<int> campgroundIDList = new List<int>();
+
+            List<Campground> campgrounds = GetAllCampgrounds(parkID);
+
+            foreach (Campground campground in campgrounds)
+            {
+                campgroundIDList.Add(campground.CampgroundID);
+            }
+
+            if (campgroundIDList.Contains(campgroundID))
+            {
+                result = true;
+            }
+
+            return result;
         }
     }
 }

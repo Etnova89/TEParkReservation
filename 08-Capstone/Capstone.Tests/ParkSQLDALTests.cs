@@ -46,7 +46,6 @@ namespace Capstone.Tests
             ParkSQLDAL park = new ParkSQLDAL(connectionString);
             List<Park> parks = park.GetAllParks();
             Assert.IsNotNull(parks);
-            Assert.AreEqual(3, parks.Count);
         }
 
         [TestMethod]
