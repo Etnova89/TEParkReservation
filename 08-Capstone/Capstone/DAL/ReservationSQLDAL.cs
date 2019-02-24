@@ -22,13 +22,6 @@ namespace Capstone.DAL
 			            AND site_number = @siteNumber));
             SELECT CAST(SCOPE_IDENTITY() as int);";
 
-        //TODO: Address this method: ProjectCLI vs SQLDAL?
-        //public List<Campsite> SearchCampsites(int campgroundID)
-        //{
-        //    List<Campsite> campsites = new List<Campsite>();
-        //    return campsites;
-        //}
-
         public ReservationSQLDAL(string dbConnectionString)
         {
             connectionString = dbConnectionString;

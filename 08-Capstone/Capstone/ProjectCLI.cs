@@ -22,8 +22,8 @@ namespace Capstone
 
                 try
                 {
+                    Console.Write("Selection: ");
                     string command = Console.ReadLine();
-                    //int number = 0; TODO?
                     if (command.ToUpper() == "Q")
                     {
                         done = true;
@@ -50,8 +50,7 @@ namespace Capstone
             Console.WriteLine();
 
         }
-
-        // TODO: CLI methods should not be testable, so they should be void
+        
         public void PrintAllParks()
         {
             ParkSQLDAL dal = new ParkSQLDAL(DatabaseConnection);
@@ -65,6 +64,7 @@ namespace Capstone
                 }
                 Console.WriteLine();
                 Console.WriteLine("Q) quit");
+                Console.WriteLine();
             }
             else
             {
@@ -89,6 +89,7 @@ namespace Capstone
                     Console.WriteLine("2) Search For Reservation");
                     Console.WriteLine("3) Return to Previous Screen");
                     Console.WriteLine();
+                    Console.Write("Selection: ");
 
                     try
                     {
@@ -135,13 +136,14 @@ namespace Capstone
 
             if (park.Location != null || park.Description != null)
             {
-
+                Console.WriteLine();
                 Console.WriteLine("Park Information Screen");
+                Console.WriteLine();
                 Console.WriteLine(park.ParkName);
                 Console.WriteLine("Location:".PadRight(30) + park.Location);
                 Console.WriteLine("Established:".PadRight(30) + park.EstablishedDate.ToShortDateString());
-                Console.WriteLine("Area:".PadRight(30) + park.AreaInAcres.ToString() + "Acres");
-                Console.WriteLine("Annual Visitors:".PadRight(30) + park.AnnualVisitors.ToString());
+                Console.WriteLine("Area:".PadRight(30) + park.AreaInAcres.ToString("#,###") + " Acres");
+                Console.WriteLine("Annual Visitors:".PadRight(30) + park.AnnualVisitors.ToString("#,###"));
                 Console.WriteLine();
                 Console.WriteLine(park.Description);
                 Console.WriteLine();
@@ -159,6 +161,7 @@ namespace Capstone
 
             if (campgrounds.Count > 0)
             {
+                Console.WriteLine();
                 Console.WriteLine("Name".PadLeft(11).PadRight(33) + "Open".PadRight(15) + "Close".PadRight(15) + "Fee");
                 Console.WriteLine(new String('=', 69));
                 foreach (Campground campground in campgrounds)
@@ -183,6 +186,7 @@ namespace Capstone
                 Console.WriteLine("1) Search For Available Reservations");
                 Console.WriteLine("2) Return to Previous Screen");
                 Console.WriteLine();
+                Console.Write("Selection: ");
 
                 try
                 {
@@ -221,6 +225,7 @@ namespace Capstone
 
                 Reservation reservation = new Reservation();
 
+                Console.WriteLine();
                 Console.WriteLine("Search for Campground Reservation");
                 PrintCampgrounds(parkID);
                 Console.WriteLine();
@@ -250,7 +255,9 @@ namespace Capstone
             {
                 Console.WriteLine();
                 Console.WriteLine("Results Matching Your Search Criteria");
+                Console.WriteLine();
                 Console.WriteLine("Site No.".PadRight(10) + "Max Occupancy".PadRight(15) + "Accessible?".PadRight(15) + "Max RV Length".PadRight(15) + "Utility".PadRight(15) + "Cost");
+                Console.WriteLine(new String('=', 77));
                 foreach (Campsite campsite in campsites)
                 {
                     decimal totalFee = CLIHelper.GetTotalFee(campsite.DailyFee, arrivalDate, departureDate);
@@ -295,7 +302,9 @@ namespace Capstone
 
                 if (reservationID > 0)
                 {
-                    Console.WriteLine($"The reservation has been made and the confirmation id is {reservationID}");
+                    Console.WriteLine();
+                    Console.WriteLine($"The reservation has been made and the confirmation id is {reservationID}. Press enter to continue.");
+                    Console.ReadLine();
                     done = true;
                 }
                 else
