@@ -13,7 +13,6 @@ namespace Capstone.Tests
     {
         private TransactionScope tran;
         private string connectionString = @"Data Source=.\sqlexpress;Initial Catalog=NationalParkReservation;Integrated Security=True";
-        private int departmentCount = 0; //TODO
         int maxID = 0;
 
         [TestInitialize]

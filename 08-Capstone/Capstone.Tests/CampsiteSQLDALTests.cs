@@ -13,7 +13,6 @@ namespace Capstone.Tests
     {
         private TransactionScope tran;
         private string connectionString = @"Data Source=.\sqlexpress;Initial Catalog=NationalParkReservation;Integrated Security=True";
-        private int departmentCount = 0; //TODO
         int maxID = 0;
 
         [TestInitialize]
@@ -26,11 +25,8 @@ namespace Capstone.Tests
                 SqlCommand cmd;
                 connection.Open();
 
-                //cmd = new SqlCommand("SELECT COUNT(*) FROM department;", connection); //TODO
-                //departmentCount = (int)cmd.ExecuteScalar();
-
-                //cmd = new SqlCommand("INSERT INTO department(name) VALUES ('Kyles Place'); SELECT CAST(SCOPE_IDENTITY() as int);", connection);//TODO
-                //maxID = (int)cmd.ExecuteScalar();
+                cmd = new SqlCommand("INSERT INTO site (campground_id, site_number, max_occupancy, accessible, max_rv_length, utilities) VALUES (1, 1, 1,1,1,1); SELECT CAST(SCOPE_IDENTITY() as int);", connection);
+                maxID = (int)cmd.ExecuteScalar();
             }
         }
 
@@ -46,6 +42,14 @@ namespace Capstone.Tests
             CampsiteSQLDAL reservation = new CampsiteSQLDAL(connectionString);
             List<Campsite> campsites = CampsiteSQLDAL.SearchCampsites(1, new System.DateTime(2019, 01, 01), new System.DateTime(2019, 02, 01));
             Assert.IsNotNull(campsites);
+        }
+
+        [TestMethod]
+        public void GetAvailableCampsitesTest()
+        {
+            CampsiteSQLDAL campsite= new CampsiteSQLDAL(connectionString);
+            bool result = CampsiteSQLDAL.GetAvailableCampsites(1, new System.DateTime(1970,1,1), new System.DateTime(1970,2,1), 1);
+            Assert.IsTrue(result);
         }
     }
 }

@@ -48,7 +48,6 @@ namespace Capstone.DAL
             }
             catch (Exception ex)
             {
-
                 throw;
             }
 

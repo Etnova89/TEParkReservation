@@ -47,7 +47,6 @@ namespace Capstone.DAL
             }
             catch (Exception)
             {
-
                 throw;
             }
 
@@ -75,8 +74,6 @@ namespace Capstone.DAL
                         park.AreaInAcres = Convert.ToInt32(reader["area"]);
                         park.AnnualVisitors = Convert.ToInt32(reader["visitors"]);
                         park.Description = Convert.ToString(reader["description"]);
-
-                        //if (park.ParkID = null)
                     }
                 }
             }
