@@ -178,11 +178,11 @@ namespace Capstone
             if (campgrounds.Count > 0)
             {
                 Console.WriteLine();
-                Console.WriteLine("Name".PadLeft(11).PadRight(33) + "Open".PadRight(15) + "Close".PadRight(15) + "Fee");
-                Console.WriteLine(new String('=', 69));
+                Console.WriteLine("Name".PadLeft(11).PadRight(43) + "Open".PadRight(15) + "Close".PadRight(15) + "Fee");
+                Console.WriteLine(new String('=', 79));
                 foreach (Campground campground in campgrounds)
                 {
-                    Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(25)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.OpenMonth).PadRight(14)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.CloseMonth).PadRight(14)} {campground.DailyFee.ToString("C2")}");
+                    Console.WriteLine($"#{campground.CampgroundID.ToString().PadRight(5)} {campground.CampgroundName.ToString().PadRight(35)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.OpenMonth).PadRight(14)} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(campground.CloseMonth).PadRight(14)} {campground.DailyFee.ToString("C2")}");
                 }
                 Console.WriteLine();
             }
